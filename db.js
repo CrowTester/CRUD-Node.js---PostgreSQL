@@ -4,10 +4,10 @@ const { Pool } = pg;
 
 // Criamos uma nova instância do Pool de conexões
 const pool = new Pool({
-  user: 'Davi',
+  user: 'postgres',
   host: 'localhost',
-  database: 'class work',
-  password: '1234',
+  database: 'Class work',
+  password: 'senai',
   port: 5433,
 });
 
