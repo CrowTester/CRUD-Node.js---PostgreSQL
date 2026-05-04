@@ -4,11 +4,11 @@ const { Pool } = pg;
 
 // Criamos uma nova instância do Pool de conexões
 const pool = new Pool({
-  user: 'seu_usuario',
+  user: 'Davi',
   host: 'localhost',
-  database: 'nome_do_seu_banco',
-  password: 'sua_senha',
-  port: 5432,
+  database: 'class work',
+  password: '1234',
+  port: 5433,
 });
 
 export default pool;
