@@ -2,6 +2,7 @@ import express from 'express';
 import pool from './db.js';
 
 const app = express();
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // ROTA DE LISTAGEM (READ) - GET /livros
