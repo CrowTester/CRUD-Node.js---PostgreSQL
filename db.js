@@ -1,3 +1,4 @@
+// Importamos o driver do Postgres
 import pg from 'pg';
 const { Pool } = pg;
 
@@ -7,7 +8,7 @@ const pool = new Pool({
   host: 'localhost',
   database: 'nome_do_seu_banco',
   password: 'sua_senha',
-  port: 5433  ,
+  port: 5432,
 });
 
 export default pool;
