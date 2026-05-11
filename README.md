@@ -1,6 +1,6 @@
-# Livraria API
+# API de Pedidos e Clientes
 
-API REST para gerenciamento de livros em uma livraria, utilizando Node.js e PostgreSQL sem ORM.
+API REST para gerenciamento de clientes e pedidos em uma cafeteria, utilizando Node.js e PostgreSQL sem ORM.
 
 ## Configuração
 
@@ -11,15 +11,21 @@ API REST para gerenciamento de livros em uma livraria, utilizando Node.js e Post
 
 2. Configure o PostgreSQL:
    - Crie um banco de dados.
-   - Execute o script SQL para criar a tabela:
+   - Execute o script SQL para criar as tabelas:
 
    ```sql
-   CREATE TABLE livros (
+   CREATE TABLE IF NOT EXISTS clientes (
      id SERIAL PRIMARY KEY,
-     titulo VARCHAR(255) NOT NULL,
-     autor VARCHAR(255) NOT NULL,
-     ano_publicacao INTEGER,
-     disponivel BOOLEAN DEFAULT true
+     nome VARCHAR(255) NOT NULL,
+     email VARCHAR(255) UNIQUE NOT NULL
+   );
+
+   CREATE TABLE IF NOT EXISTS pedidos (
+     id SERIAL PRIMARY KEY,
+     produto VARCHAR(255) NOT NULL,
+     valor NUMERIC(10,2) NOT NULL,
+     status VARCHAR(50) DEFAULT 'pendente',
+     cliente_id INTEGER REFERENCES clientes(id)
    );
    ```
 
@@ -32,12 +38,38 @@ API REST para gerenciamento de livros em uma livraria, utilizando Node.js e Post
 
 ## Endpoints
 
-- `GET /livros` - Lista todos os livros (opcional: `?autor=...` para filtrar)
-- `GET /livros/:id` - Detalhes de um livro
-- `POST /livros` - Cria um novo livro (JSON: titulo, autor, ano_publicacao)
-- `PUT /livros/:id` - Atualiza um livro
-- `DELETE /livros/:id` - Remove um livro
+### Clientes
+- `POST /clientes` - Cadastra novo cliente.
+- `GET /clientes` - Lista todos os clientes.
+- `PUT /clientes/:id` - Atualiza dados do cliente por ID.
+- `DELETE /clientes/:id` - Remove cliente.
+- `GET /clientes/:id/pedidos` - Lista todos os pedidos de um cliente.
+
+### Pedidos
+- `POST /pedidos` - Cadastra novo pedido vinculado a um cliente.
+- `GET /pedidos` - Lista pedidos com o nome do cliente.
+- `GET /pedidos?status=entregue` - Filtra pedidos por status.
+- `GET /pedidos/:id` - Detalhes de um pedido específico.
+- `GET /pedidos/nome/:nome` - Busca pedidos por nome do produto.
+- `PUT /pedidos/:id` - Atualiza dados do pedido por ID.
+
+## Boas práticas
+
+- Usa queries parametrizadas para evitar SQL Injection.
+- Valida `cliente_id` antes de criar pedidos.
+- Valida que `status` seja apenas: `pendente`, `preparando` ou `entregue`.
 
 ## Teste
 
-Use Postman ou curl para testar os endpoints.
+Use Postman, Insomnia ou curl para testar os endpoints.
+
+Exemplo de criação de pedido:
+
+```json
+{
+  "produto": "Cappuccino",
+  "valor": 12.5,
+  "status": "pendente",
+  "cliente_id": 1
+}
+```
